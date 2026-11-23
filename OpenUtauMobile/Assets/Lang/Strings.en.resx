@@ -2140,6 +2140,15 @@
   <data name="RendererSettings.Resampler" xml:space="preserve">
     <value>Resampler</value>
   </data>
+  <data name="RendererSettings.Resampler.Test" xml:space="preserve">
+    <value>Test resampler</value>
+  </data>
+  <data name="SingerDetail.CheckVoicebank" xml:space="preserve">
+    <value>Check voicebank</value>
+  </data>
+  <data name="EditorMore.ForceRerender" xml:space="preserve">
+    <value>Force re-render</value>
+  </data>
   <data name="RendererSettings.Wavtool" xml:space="preserve">
     <value>Wavtool</value>
   </data>
@@ -2901,5 +2910,53 @@ Applying replaces the source of this input.</value></data>
   </data>
   <data name="ExportVideoPopup.Toast.Failed" xml:space="preserve">
     <value>Video export failed.</value>
+  </data>
+  <data name="Options.ResamplerCatalog" xml:space="preserve">
+    <value>Resamplers</value>
+  </data>
+  <data name="Options.ResamplerCatalog.Desc" xml:space="preserve">
+    <value>Download ready-made resamplers or add your own</value>
+  </data>
+  <data name="ResamplerCatalog.Title" xml:space="preserve">
+    <value>Resamplers</value>
+  </data>
+  <data name="ResamplerCatalog.Tab.Catalog" xml:space="preserve">
+    <value>Catalog</value>
+  </data>
+  <data name="ResamplerCatalog.Tab.Own" xml:space="preserve">
+    <value>My own</value>
+  </data>
+  <data name="ResamplerCatalog.Install" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="ResamplerCatalog.Update" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="ResamplerCatalog.Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="ResamplerCatalog.Installed" xml:space="preserve">
+    <value>Installed</value>
+  </data>
+  <data name="ResamplerCatalog.Source" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="ResamplerCatalog.AddFromFile" xml:space="preserve">
+    <value>Add from file</value>
+  </data>
+  <data name="ResamplerCatalog.OwnEmpty" xml:space="preserve">
+    <value>No resamplers of your own yet. Tap the file button to add a .sh resampler.</value>
+  </data>
+  <data name="ResamplerCatalog.Error.Load" xml:space="preserve">
+    <value>Couldn't load the catalog. Check your connection and refresh.</value>
+  </data>
+  <data name="ResamplerCatalog.Toast.Installed" xml:space="preserve">
+    <value>Resampler ready</value>
+  </data>
+  <data name="ResamplerCatalog.Toast.Failed" xml:space="preserve">
+    <value>Failed:</value>
+  </data>
+  <data name="ResamplerCatalog.FilePicker.Title" xml:space="preserve">
+    <value>Select a resampler</value>
   </data>
 </root>

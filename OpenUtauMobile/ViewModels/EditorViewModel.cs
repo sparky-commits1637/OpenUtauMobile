@@ -818,12 +818,29 @@ public partial class EditorViewModel : NavigateViewModelBase, ICmdSubscriber, ID
         await ExecuteEditorActionAsync(action);
     }
 
+    /// <summary>清空渲染缓存后重新渲染整个工程，用于预览声音过期时强制刷新。</summary>
+    private async Task ForceRerenderAsync()
+    {
+        if (_disposed || IsLoadingProject) return;
+        await Task.Run(() =>
+        {
+            Directory.CreateDirectory(PathManager.Inst.CachePath);
+            PathManager.Inst.ClearCache();
+        });
+        DocManager.Inst.ExecuteCmd(new ValidateProjectNotification());
+        DocManager.Inst.ExecuteCmd(new PreRenderNotification());
+        ToastService.Enqueue(LocalizedText.S("EditorMore.ForceRerender.Done", "Cache cleared. Re-rendering…"));
+    }
+
     public async Task ExecuteEditorActionAsync(EditorMoreAction action)
     {
         switch (action)
         {
             case EditorMoreAction.BatchEdit:
                 await PianoRollViewModel.ShowBatchEditPopupAsync();
+                break;
+            case EditorMoreAction.ForceRerender:
+                await ForceRerenderAsync();
                 break;
             case EditorMoreAction.ExpressionGraphs:
                 if (_disposed || IsLoadingProject || Navigator.CurrentViewModel != this) break;

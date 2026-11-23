@@ -2902,4 +2902,61 @@
   <data name="ExportVideoPopup.Toast.Failed" xml:space="preserve">
     <value>视频导出失败。</value>
   </data>
+  <data name="Options.ResamplerCatalog" xml:space="preserve">
+    <value>重采样器</value>
+  </data>
+  <data name="Options.ResamplerCatalog.Desc" xml:space="preserve">
+    <value>下载现成的重采样器，或添加自己的</value>
+  </data>
+  <data name="ResamplerCatalog.Title" xml:space="preserve">
+    <value>重采样器</value>
+  </data>
+  <data name="ResamplerCatalog.Tab.Catalog" xml:space="preserve">
+    <value>在线目录</value>
+  </data>
+  <data name="ResamplerCatalog.Tab.Own" xml:space="preserve">
+    <value>我自己的</value>
+  </data>
+  <data name="ResamplerCatalog.Install" xml:space="preserve">
+    <value>下载</value>
+  </data>
+  <data name="ResamplerCatalog.Update" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="ResamplerCatalog.Remove" xml:space="preserve">
+    <value>移除</value>
+  </data>
+  <data name="ResamplerCatalog.Installed" xml:space="preserve">
+    <value>已安装</value>
+  </data>
+  <data name="ResamplerCatalog.Source" xml:space="preserve">
+    <value>来源</value>
+  </data>
+  <data name="ResamplerCatalog.AddFromFile" xml:space="preserve">
+    <value>从文件添加</value>
+  </data>
+  <data name="ResamplerCatalog.OwnEmpty" xml:space="preserve">
+    <value>还没有自己添加的重采样器。点按文件按钮添加 .sh 重采样器。</value>
+  </data>
+  <data name="ResamplerCatalog.Error.Load" xml:space="preserve">
+    <value>无法加载目录。请检查网络后刷新。</value>
+  </data>
+  <data name="ResamplerCatalog.Toast.Installed" xml:space="preserve">
+    <value>重采样器已就绪</value>
+  </data>
+  <data name="ResamplerCatalog.Toast.Failed" xml:space="preserve">
+    <value>失败：</value>
+  </data>
+  <data name="ResamplerCatalog.FilePicker.Title" xml:space="preserve">
+    <value>选择重采样器</value>
+  </data>
+  <data name="RendererSettings.Resampler.Test" xml:space="preserve">
+    <value>测试重采样器</value>
+  </data>
+  <data name="SingerDetail.CheckVoicebank" xml:space="preserve">
+    <value>检查声库</value>
+  </data>
+  <data name="EditorMore.ForceRerender" xml:space="preserve">
+    <value>强制重新渲染</value>
+  </data>
 </root>

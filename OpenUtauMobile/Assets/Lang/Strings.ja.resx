@@ -2896,4 +2896,61 @@ Applying replaces the source of this input.</value></data>
   <data name="ExportVideoPopup.Toast.Failed" xml:space="preserve">
     <value>Video export failed.</value>
   </data>
+  <data name="Options.ResamplerCatalog" xml:space="preserve">
+    <value>リサンプラー</value>
+  </data>
+  <data name="Options.ResamplerCatalog.Desc" xml:space="preserve">
+    <value>作成済みのリサンプラーをダウンロード、または自分で追加</value>
+  </data>
+  <data name="ResamplerCatalog.Title" xml:space="preserve">
+    <value>リサンプラー</value>
+  </data>
+  <data name="ResamplerCatalog.Tab.Catalog" xml:space="preserve">
+    <value>カタログ</value>
+  </data>
+  <data name="ResamplerCatalog.Tab.Own" xml:space="preserve">
+    <value>自分のもの</value>
+  </data>
+  <data name="ResamplerCatalog.Install" xml:space="preserve">
+    <value>ダウンロード</value>
+  </data>
+  <data name="ResamplerCatalog.Update" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="ResamplerCatalog.Remove" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="ResamplerCatalog.Installed" xml:space="preserve">
+    <value>インストール済み</value>
+  </data>
+  <data name="ResamplerCatalog.Source" xml:space="preserve">
+    <value>ソース</value>
+  </data>
+  <data name="ResamplerCatalog.AddFromFile" xml:space="preserve">
+    <value>ファイルから追加</value>
+  </data>
+  <data name="ResamplerCatalog.OwnEmpty" xml:space="preserve">
+    <value>自分のリサンプラーはまだありません。ファイルボタンから .sh リサンプラーを追加できます。</value>
+  </data>
+  <data name="ResamplerCatalog.Error.Load" xml:space="preserve">
+    <value>カタログを読み込めませんでした。接続を確認して更新してください。</value>
+  </data>
+  <data name="ResamplerCatalog.Toast.Installed" xml:space="preserve">
+    <value>リサンプラーの準備ができました</value>
+  </data>
+  <data name="ResamplerCatalog.Toast.Failed" xml:space="preserve">
+    <value>失敗：</value>
+  </data>
+  <data name="ResamplerCatalog.FilePicker.Title" xml:space="preserve">
+    <value>リサンプラーを選択</value>
+  </data>
+  <data name="RendererSettings.Resampler.Test" xml:space="preserve">
+    <value>リサンプラーをテスト</value>
+  </data>
+  <data name="SingerDetail.CheckVoicebank" xml:space="preserve">
+    <value>音源をチェック</value>
+  </data>
+  <data name="EditorMore.ForceRerender" xml:space="preserve">
+    <value>強制再レンダリング</value>
+  </data>
 </root>

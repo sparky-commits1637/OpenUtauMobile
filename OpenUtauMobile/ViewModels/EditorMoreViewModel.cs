@@ -17,7 +17,8 @@ public enum EditorMoreAction
     Redo,
     ExpressionGraphs,
     BatchEdit,
-    ExportPianoRollVideo // 导出钢琴卷帘视频
+    ExportPianoRollVideo, // 导出钢琴卷帘视频
+    ForceRerender // 清空渲染缓存并重新渲染
 }
 
 public class EditorMoreViewModel : PopupViewModelBase

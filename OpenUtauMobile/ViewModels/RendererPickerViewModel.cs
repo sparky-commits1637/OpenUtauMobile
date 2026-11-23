@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Threading;
@@ -84,6 +86,8 @@ public class RendererPickerViewModel : PopupViewModelBase, ICmdSubscriber, IDisp
     public Func<bool>? CloseDropDown { get; set; }
     public ReactiveCommand<Unit, Unit> ApplyCommand { get; }
     public ReactiveCommand<Unit, Unit> CancelCommand { get; }
+    /// <summary>对当前选中的重采样器做一次真实调用，并显示退出码与程序输出。</summary>
+    public ReactiveCommand<Unit, Unit> TestResamplerCommand { get; }
 
     public RendererPickerViewModel(UProject project, UTrack track)
     {
@@ -102,6 +106,8 @@ public class RendererPickerViewModel : PopupViewModelBase, ICmdSubscriber, IDisp
         if (_original.renderer != RendererRegistry.CLASSIC && _original.wavtool == null) InitializeDefaultTools();
         ApplyCommand = ReactiveCommand.Create(Apply, this.WhenAnyValue(vm => vm.CanApply)).DisposeWith(_disposables);
         CancelCommand = ReactiveCommand.Create(() => RaiseClose(null)).DisposeWith(_disposables);
+        TestResamplerCommand = ReactiveCommand.CreateFromTask(TestResamplerAsync,
+            this.WhenAnyValue(vm => vm.SelectedResampler).Select(name => !string.IsNullOrEmpty(name))).DisposeWith(_disposables);
         this.WhenAnyValue(vm => vm.SelectedRenderer, vm => vm.SelectedResampler, vm => vm.SelectedWavtool)
             .Subscribe(_ => QueueRefresh()).DisposeWith(_disposables);
         this.WhenAnyValue(vm => vm.SelectedGraph).Subscribe(_ => QueueRefresh()).DisposeWith(_disposables);
@@ -109,6 +115,21 @@ public class RendererPickerViewModel : PopupViewModelBase, ICmdSubscriber, IDisp
             Application.Current.GetResourceObservable("RendererSettings.Graph.Default")
                 .Subscribe(_ => Dispatcher.UIThread.Post(Refresh)).DisposeWith(_disposables);
         DocManager.Inst.AddSubscriber(this);
+    }
+
+    /// <summary>测试当前重采样器：成功时提示，失败时在错误弹窗中展示原因和程序输出。</summary>
+    private async Task TestResamplerAsync()
+    {
+        string? name = SelectedResampler;
+        if (string.IsNullOrEmpty(name)) return;
+        Services.ResamplerTestResult result = await Services.ResamplerTestService.RunAsync(name);
+        if (result.Success)
+        {
+            Services.Dialogs.ToastService.Enqueue(result.Summary, 4000);
+            return;
+        }
+        Services.Dialogs.ErrorDialogService.Show(new ErrorDialogViewModel(
+            new ErrorMessageNotification(result.Summary, new Services.ResamplerTestException(result.Details))));
     }
 
     private void LoadTools()

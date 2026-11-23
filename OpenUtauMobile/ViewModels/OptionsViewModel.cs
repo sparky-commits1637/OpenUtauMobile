@@ -16,6 +16,7 @@ public class OptionsViewModel : NavigateViewModelBase
     /// <summary>iOS 与浏览器无法启动外部程序，不提供自定义重采样器入口。</summary>
     public bool IsResamplerManagerAvailable => !OperatingSystem.IsIOS() && !OperatingSystem.IsBrowser();
     public ReactiveCommand<Unit, Unit> OpenResamplerManagerCommand { get; }
+    public ReactiveCommand<Unit, Unit> OpenResamplerCatalogCommand { get; }
     /// <summary>仅在平台注册了沙箱传输能力时显示文件管理入口。</summary>
     public bool IsSandboxFileManagerAvailable => ServiceHub.SandboxFileTransferService != null;
     public ReactiveCommand<Unit, Unit> OpenSandboxFileManagerCommand { get; }
@@ -30,6 +31,7 @@ public class OptionsViewModel : NavigateViewModelBase
         OpenDependencyManagerCommand = ReactiveCommand.Create(OnOpenDependencyManager);
         OpenPluginManagerCommand = ReactiveCommand.Create(() => Navigator.Navigate(new PluginManagerViewModel(Navigator)));
         OpenResamplerManagerCommand = ReactiveCommand.Create(() => Navigator.Navigate(new ResamplerManagerViewModel(Navigator)));
+        OpenResamplerCatalogCommand = ReactiveCommand.Create(() => Navigator.Navigate(new ResamplerCatalogViewModel(Navigator)));
         OpenSandboxFileManagerCommand = ReactiveCommand.Create(() => Navigator.Navigate(new SandboxFileManagerViewModel(Navigator)));
         OpenHelpCommand = ReactiveCommand.Create(OnOpenHelp);
         OpenExportLogsCommand = ReactiveCommand.Create(OnOpenExportLogs);

@@ -178,6 +178,8 @@ public class SplashScreenViewModel : NavigateViewModelBase, IDisposable
                     ProgressPercent = 100;
                     InitState = L.S("Splash.Complete");
                     Navigator.CompleteStartup(new HomeViewModel(Navigator));
+                    // 启动后在后台检查一次更新，失败时静默。
+                    _ = Services.UpdateCheckService.CheckOnStartupAsync();
                     PluginLoadErrorReporter.Instance.ShowPendingErrors();
                     if (pendingDeletionFailures > 0)
                         ToastService.Enqueue(L.S("PluginManager.PendingDeletionFailed"));
