@@ -10,10 +10,12 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
+using OpenUtau.Core;
 using OpenUtau.Core.Util;
 using OpenUtauMobile.Helpers;
 using OpenUtauMobile.Services.Dialogs;
 using OpenUtauMobile.Services.Platform;
+using OpenUtauMobile.ViewModels;
 using Serilog;
 
 namespace OpenUtauMobile.Services;
@@ -153,7 +155,7 @@ public static class UpdateCheckService
         string content = string.Format(LocalizedText.S("UpdateCheck.Current", "You have: {0}"),
             current.Length == 0 ? L.S("Common.Unknown") : current)
             + Environment.NewLine + Environment.NewLine + CleanNotes(release.Notes);
-        List<OptionConfirmOption> options =
+        OptionConfirmOption[] options =
         [
             new(LocalizedText.S("UpdateCheck.Open", "Open release page"), "open", isPrimary: true),
             new(LocalizedText.S("UpdateCheck.Later", "Later"), "later", isDefault: true),
