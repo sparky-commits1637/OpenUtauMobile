@@ -46,7 +46,14 @@ internal sealed class NoteExtractionAction
                         if (request.Settings.ExtractPitch)
                         {
                             loading.UpdateProgress(0d, L.S("NoteExtraction.ExtractingPitch"));
-                            NoteExtractionService.ExtractPitch(project, source, extracted, cancellation,
+                            NoteExtractionService.ExtractPitch(project, source, extracted, request.Settings.PitchModel,
+                                cancellation, (current, total) => loading.UpdateProgress(current, total));
+                        }
+                        // 歌词识别同样在前面的模型释放后再加载 Moonshine。
+                        if (request.Settings.ExtractLyrics)
+                        {
+                            loading.UpdateProgress(0d, L.S("NoteExtraction.TranscribingLyrics"));
+                            NoteExtractionService.ExtractLyrics(project, source, extracted, cancellation,
                                 (current, total) => loading.UpdateProgress(current, total));
                         }
                         return extracted;

@@ -1890,7 +1890,14 @@
   <data name="NoteExtraction.LanguageUnavailable" xml:space="preserve"><value>Язык не поддерживается</value></data>
   <data name="NoteExtraction.RmvpeInstalled" xml:space="preserve"><value>rmvpe: установлено</value></data>
   <data name="NoteExtraction.RmvpeMissing" xml:space="preserve"><value>Для извлечения высоты установите зависимость rmvpe</value></data>
-  <data name="NoteExtraction.ExtractPitch" xml:space="preserve"><value>Извлечь кривую высоты через RMVPE</value></data>
+  <data name="NoteExtraction.ExtractPitch" xml:space="preserve"><value>Извлечь кривую высоты</value></data>
+  <data name="NoteExtraction.PitchModel" xml:space="preserve"><value>Модель высоты</value></data>
+  <data name="NoteExtraction.TalkloidReady" xml:space="preserve"><value>talkloid: встроено</value></data>
+  <data name="NoteExtraction.TalkloidMissing" xml:space="preserve"><value>Не удалось загрузить встроенную модель высоты TalkLoid</value></data>
+  <data name="NoteExtraction.ExtractLyrics" xml:space="preserve"><value>Распознать текст через Moonshine</value></data>
+  <data name="NoteExtraction.MoonshineInstalled" xml:space="preserve"><value>moonshine-tiny: установлено</value></data>
+  <data name="NoteExtraction.MoonshineMissing" xml:space="preserve"><value>Для распознавания текста поместите файлы ONNX Moonshine tiny и tokenizer.json в папку зависимости moonshine-tiny</value></data>
+  <data name="NoteExtraction.TranscribingLyrics" xml:space="preserve"><value>Распознавание текста…</value></data>
   <data name="NoteExtraction.Universal" xml:space="preserve"><value>Универсальный</value></data>
   <data name="NoteExtraction.Language" xml:space="preserve"><value>Язык</value></data>
   <data name="NoteExtraction.SamplingSteps" xml:space="preserve"><value>Шаги сэмплирования</value></data>

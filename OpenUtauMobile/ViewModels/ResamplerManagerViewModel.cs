@@ -33,8 +33,15 @@ public sealed class ResamplerManagerViewModel : NavigateViewModelBase, IDisposab
     public ReactiveCommand<Unit, Unit> AddCommand { get; }
     public ReactiveCommand<ResamplerCardViewModel, Unit> RemoveCommand { get; }
 
-    public ResamplerManagerViewModel(MainViewModel navigator) : base(navigator)
+    /// <summary>为 true 时作为重采样器页面中的标签页内容使用，不显示自己的顶栏。</summary>
+    public bool IsEmbedded { get; }
+
+    /// <summary>刷新本地重采样器列表，供宿主页面在目录安装后调用。</summary>
+    public Task ReloadAsync() => RefreshAsync();
+
+    public ResamplerManagerViewModel(MainViewModel navigator, bool embedded = false) : base(navigator)
     {
+        IsEmbedded = embedded;
         IObservable<bool> canOperate = this.WhenAnyValue(vm => vm.IsBusy, busy => !busy);
         BackCommand = ReactiveCommand.Create(() => Navigator.NavigateBack(this), canOperate);
         RefreshCommand = ReactiveCommand.CreateFromTask(RefreshAsync, canOperate);
@@ -42,7 +49,10 @@ public sealed class ResamplerManagerViewModel : NavigateViewModelBase, IDisposab
         RemoveCommand = ReactiveCommand.CreateFromTask<ResamplerCardViewModel>(RemoveAsync, canOperate);
     }
 
-    public override void OnNavigatedTo() => _ = RefreshAsync();
+    public override void OnNavigatedTo()
+    {
+        if (!IsEmbedded) _ = RefreshAsync();
+    }
 
     public override void OnBackRequested()
     {

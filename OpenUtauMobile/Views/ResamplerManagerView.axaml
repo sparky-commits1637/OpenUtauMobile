@@ -22,7 +22,7 @@
     <Panel Background="{DynamicResource Sem.Color.Surface}">
         <DockPanel>
             <!-- 顶栏：返回、标题与刷新，沿用应用导航页的公共角色。 -->
-            <Border DockPanel.Dock="Top" Classes="TopBar">
+            <Border DockPanel.Dock="Top" Classes="TopBar" IsVisible="{Binding !IsEmbedded}">
                 <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="{x:Static foundation:LayoutTokens.SpaceS}">
                     <Button Classes="TopBarBtn" Command="{Binding BackCommand}"
                             Content="{icons:PhosphorIcons ArrowLeft}" ToolTip.Tip="{DynamicResource Common.Back}"

@@ -30,11 +30,27 @@
                         <TextBlock Classes="Hint" Text="{Binding OnnxStatus}" />
                         <TextBlock Classes="Hint" Text="{Binding GgmlStatus}" />
                     </StackPanel>
-                    <StackPanel Spacing="{x:Static foundation:LayoutTokens.SpaceXS}" ToolTip.Tip="{Binding RmvpeStatus}">
-                        <CheckBox IsEnabled="{Binding RmvpeAvailable}" IsChecked="{Binding ExtractPitch, Mode=TwoWay}">
+                    <!-- 音高曲线提取：勾选后可在 RMVPE 与内置 TalkLoid 模型之间选择 -->
+                    <StackPanel Spacing="{x:Static foundation:LayoutTokens.SpaceXS}" ToolTip.Tip="{Binding PitchStatus}">
+                        <CheckBox IsEnabled="{Binding CanExtractPitch}" IsChecked="{Binding ExtractPitch, Mode=TwoWay}">
                             <TextBlock Text="{DynamicResource NoteExtraction.ExtractPitch}" TextWrapping="Wrap" />
                         </CheckBox>
-                        <TextBlock Classes="Hint" Text="{Binding RmvpeStatus}" />
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="{x:Static foundation:LayoutTokens.SpaceM}" IsVisible="{Binding ExtractPitch}">
+                            <TextBlock Classes="FieldLabel" Text="{DynamicResource NoteExtraction.PitchModel}" />
+                            <ComboBox Grid.Column="1" ItemsSource="{Binding PitchModels}" SelectedItem="{Binding PitchModel, Mode=TwoWay}" HorizontalAlignment="Stretch">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate x:DataType="vm:NoteExtractionPitchModel"><TextBlock Text="{Binding Label}" /></DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </Grid>
+                        <TextBlock Classes="Hint" Text="{Binding PitchStatus}" />
+                    </StackPanel>
+                    <!-- 歌词识别：Moonshine 转写后按音节依次写入提取出的音符 -->
+                    <StackPanel Spacing="{x:Static foundation:LayoutTokens.SpaceXS}" ToolTip.Tip="{Binding MoonshineStatus}">
+                        <CheckBox IsEnabled="{Binding MoonshineAvailable}" IsChecked="{Binding ExtractLyrics, Mode=TwoWay}">
+                            <TextBlock Text="{DynamicResource NoteExtraction.ExtractLyrics}" TextWrapping="Wrap" />
+                        </CheckBox>
+                        <TextBlock Classes="Hint" Text="{Binding MoonshineStatus}" />
                     </StackPanel>
                     <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto"
                           ColumnSpacing="{x:Static foundation:LayoutTokens.SpaceM}" RowSpacing="{x:Static foundation:LayoutTokens.SpaceS}">

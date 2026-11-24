@@ -1,14 +1,11 @@
 using System;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Reactive;
 using System.Threading.Tasks;
 using Avalonia.Threading;
-using Classic;
 using OpenUtauMobile.Helpers;
 using OpenUtauMobile.Services.Dialogs;
 using OpenUtauMobile.Services.Resamplers;
-using OpenUtauMobile.Storage;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Serilog;
@@ -78,6 +75,7 @@ public class CatalogResamplerItemViewModel : ViewModelBase
             InstalledVersion = null;
             this.RaisePropertyChanged(nameof(IsInstalled));
             this.RaisePropertyChanged(nameof(HasUpdate));
+            _owner.RefreshOwn();
         }
         catch (Exception e)
         {
@@ -97,27 +95,28 @@ public class ResamplerCatalogViewModel : NavigateViewModelBase
     [Reactive] public string Error { get; private set; } = string.Empty;
 
     public ObservableCollection<CatalogResamplerItemViewModel> Items { get; } = [];
-    public ObservableCollection<string> OwnResamplers { get; } = [];
+
+    /// <summary>「我自己的」标签页：原自定义重采样器管理页，嵌入在本页中。</summary>
+    public ResamplerManagerViewModel Manager { get; }
 
     public ReactiveCommand<Unit, Unit> BackCommand { get; }
     public ReactiveCommand<Unit, Unit> RefreshCommand { get; }
-    public ReactiveCommand<Unit, Unit> AddFromFileCommand { get; }
 
     public ResamplerCatalogViewModel(MainViewModel navigator) : base(navigator)
     {
+        Manager = new ResamplerManagerViewModel(navigator, embedded: true);
         BackCommand = ReactiveCommand.Create(() => Navigator.NavigateBack(this));
-        RefreshCommand = ReactiveCommand.CreateFromTask(LoadAsync);
-        AddFromFileCommand = ReactiveCommand.CreateFromTask(AddFromFileAsync);
-        RefreshOwn();
+        RefreshCommand = ReactiveCommand.CreateFromTask(async () =>
+        {
+            await Manager.ReloadAsync();
+            await LoadAsync();
+        });
+        _ = Manager.ReloadAsync();
         _ = LoadAsync();
     }
 
-    /// <summary>重新读取用户自行添加的重采样器列表。</summary>
-    public void RefreshOwn()
-    {
-        OwnResamplers.Clear();
-        foreach (string name in ResamplerCatalogService.ListOwnResamplers()) OwnResamplers.Add(name);
-    }
+    /// <summary>目录安装或卸载后刷新本地列表。</summary>
+    public void RefreshOwn() => _ = Manager.ReloadAsync();
 
     private async Task LoadAsync()
     {
@@ -136,24 +135,5 @@ public class ResamplerCatalogViewModel : NavigateViewModelBase
             Error = L.S("ResamplerCatalog.Error.Load");
         }
         finally { IsLoading = false; }
-    }
-
-    /// <summary>用户自己下载的重采样器：选择 .sh 文件并复制到 Resamplers 目录。</summary>
-    private async Task AddFromFileAsync()
-    {
-        try
-        {
-            string path = await FilePicker.PickSingleFileAsync(L.S("ResamplerCatalog.FilePicker.Title"), ["*.sh", "*.exe", "*.bat"]);
-            if (string.IsNullOrEmpty(path)) return;
-            await Task.Run(() => ExeInstaller.Install(path, ExeType.resampler));
-            await Task.Run(() => OpenUtau.Classic.ToolsManager.Inst.Initialize());
-            RefreshOwn();
-            ToastService.Enqueue(L.S("ResamplerCatalog.Toast.Installed"));
-        }
-        catch (Exception e)
-        {
-            Log.Error(e, "从文件添加重采样器失败");
-            ToastService.Enqueue(L.S("ResamplerCatalog.Toast.Failed") + " " + e.Message);
-        }
     }
 }

@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:OpenUtauMobile.ViewModels"
+             xmlns:views="clr-namespace:OpenUtauMobile.Views"
              xmlns:iconPacks="https://github.com/MahApps/IconPacks.Avalonia"
              xmlns:foundation="clr-namespace:OpenUtauMobile.Themes.OpenUtauMobile.Tokens.Foundation"
              xmlns:semantic="clr-namespace:OpenUtauMobile.Themes.OpenUtauMobile.Tokens.Semantic"
@@ -16,9 +17,9 @@
 
     <Panel Background="{DynamicResource Sem.Color.Surface}">
         <DockPanel>
-            <!-- 顶栏：返回、标题、刷新、从文件添加 -->
+            <!-- 顶栏：返回、标题、刷新 -->
             <Border DockPanel.Dock="Top" Classes="TopBar">
-                <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="{x:Static foundation:LayoutTokens.SpaceS}">
+                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="{x:Static foundation:LayoutTokens.SpaceS}">
                     <Button Grid.Column="0" Classes="TopBarBtn"
                             Command="{Binding BackCommand}"
                             ToolTip.Tip="{DynamicResource Common.Back}"
@@ -28,10 +29,6 @@
                     <Button Grid.Column="2" Classes="TopBarBtn"
                             Command="{Binding RefreshCommand}"
                             Content="{iconPacks:PhosphorIcons ArrowsClockwise}" />
-                    <Button Grid.Column="3" Classes="TopBarBtn"
-                            Command="{Binding AddFromFileCommand}"
-                            ToolTip.Tip="{DynamicResource ResamplerCatalog.AddFromFile}"
-                            Content="{iconPacks:PhosphorIcons FileArrowUp}" />
                 </Grid>
             </Border>
 
@@ -83,25 +80,9 @@
                     </ScrollViewer>
                 </TabItem>
 
-                <!-- Tab 1：用户自己添加的重采样器 -->
+                <!-- Tab 1：用户自己添加的重采样器（原自定义重采样器管理页） -->
                 <TabItem Header="{DynamicResource ResamplerCatalog.Tab.Own}">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                        <Border Padding="24,16,24,24">
-                            <StackPanel Classes="DependencyPageContent">
-                                <TextBlock Text="{DynamicResource ResamplerCatalog.OwnEmpty}" TextWrapping="Wrap" Opacity="0.72"
-                                           IsVisible="{Binding !OwnResamplers.Count}" />
-                                <ItemsControl ItemsSource="{Binding OwnResamplers}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate x:DataType="x:String">
-                                            <Border Classes="DependencyCard" Margin="0,0,0,8">
-                                                <TextBlock Text="{Binding}" TextTrimming="CharacterEllipsis" />
-                                            </Border>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                            </StackPanel>
-                        </Border>
-                    </ScrollViewer>
+                    <views:ResamplerManagerView DataContext="{Binding Manager}" />
                 </TabItem>
             </TabControl>
         </DockPanel>

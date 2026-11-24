@@ -121,20 +121,27 @@ internal static class NoteExtractionService
         if (batch.Count > 0) yield return batch;
     }
 
-    public static void ExtractPitch(UProject project, UWavePart source, UVoicePart result,
+    public static void ExtractPitch(UProject project, UWavePart source, UVoicePart result, NotePitchModel model,
         CancellationToken cancellation, Action<int, int> progress)
     {
         cancellation.ThrowIfCancellationRequested();
         if (result.notes.Count == 0) return;
-        using RmvpeTranscriber rmvpe = new();
-        using CancellationTokenRegistration registration = cancellation.Register(rmvpe.Interrupt);
+        using RmvpeTranscriber? rmvpe = model == NotePitchModel.Rmvpe ? new() : null;
+        using TalkloidPitchTranscriber? talkloid = model == NotePitchModel.Talkloid ? new() : null;
+        using CancellationTokenRegistration registration = cancellation.Register(() =>
+        {
+            rmvpe?.Interrupt();
+            talkloid?.Interrupt();
+        });
         double durationMs = project.timeAxis.MsBetweenTickPos(source.position, source.End);
         double skipMs = source.GetSkipMs(project);
         for (double offset = 0; offset < durationMs; offset += MaximumChunkSeconds * 1000)
         {
             cancellation.ThrowIfCancellationRequested();
             double end = Math.Min(offset + MaximumChunkSeconds * 1000, durationMs);
-            RmvpeResult? pitch = rmvpe.Infer(source, skipMs + offset, skipMs + end);
+            RmvpeResult? pitch = rmvpe != null
+                ? rmvpe.Infer(source, skipMs + offset, skipMs + end)
+                : talkloid!.Infer(source, skipMs + offset, skipMs + end);
             cancellation.ThrowIfCancellationRequested();
             // Infer 的起点位于源音频；曲线偏移相对于提取结果起点。
             if (pitch != null) ApplyPitch(project, result, pitch, offset);
@@ -142,6 +149,43 @@ internal static class NoteExtractionService
         }
     }
 
+
+    /// <summary>
+    /// 用 Moonshine 识别源音频文本，按时间窗把音节依次写入窗内音符的歌词。
+    /// 识别窗口按固定时长切分，窗口边界处的词可能被截断。
+    /// </summary>
+    public static void ExtractLyrics(UProject project, UWavePart source, UVoicePart result,
+        CancellationToken cancellation, Action<int, int> progress)
+    {
+        cancellation.ThrowIfCancellationRequested();
+        if (result.notes.Count == 0) return;
+        using MoonshineTranscriber moonshine = new();
+        using CancellationTokenRegistration registration = cancellation.Register(moonshine.Interrupt);
+        double durationMs = project.timeAxis.MsBetweenTickPos(source.position, source.End);
+        double skipMs = source.GetSkipMs(project);
+        double windowMs = MoonshineTranscriber.MaxSegmentSeconds * 1000;
+        UNote[] notes = [.. result.notes.OrderBy(note => note.position)];
+        double[] noteStartMs = [.. notes.Select(note =>
+            project.timeAxis.MsBetweenTickPos(source.position, source.position + note.position))];
+        for (double offset = 0; offset < durationMs; offset += windowMs)
+        {
+            cancellation.ThrowIfCancellationRequested();
+            double end = Math.Min(offset + windowMs, durationMs);
+            List<UNote> windowNotes = [];
+            for (int i = 0; i < notes.Length; i++)
+            {
+                if (noteStartMs[i] >= offset && noteStartMs[i] < end) windowNotes.Add(notes[i]);
+            }
+            if (windowNotes.Count > 0)
+            {
+                float[] audio = ExtractionAudio.ReadMono(source, skipMs + offset, skipMs + end, MoonshineTranscriber.SampleRate);
+                string text = moonshine.Transcribe(audio);
+                cancellation.ThrowIfCancellationRequested();
+                LyricAssigner.Assign(windowNotes, LyricAssigner.SplitSyllables(text));
+            }
+            progress((int)end, (int)durationMs);
+        }
+    }
 
     internal static void ApplyPitch(UProject project, UVoicePart part, RmvpeResult pitch, double offsetMs)
     {

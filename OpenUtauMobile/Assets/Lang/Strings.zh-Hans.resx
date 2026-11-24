@@ -1935,7 +1935,14 @@
   <data name="NoteExtraction.LanguageUnavailable" xml:space="preserve"><value>不支持所选语言</value></data>
   <data name="NoteExtraction.RmvpeInstalled" xml:space="preserve"><value>rmvpe：已安装</value></data>
   <data name="NoteExtraction.RmvpeMissing" xml:space="preserve"><value>需安装 rmvpe 依赖项才能提取音高</value></data>
-  <data name="NoteExtraction.ExtractPitch" xml:space="preserve"><value>使用 RMVPE 提取音高曲线</value></data>
+  <data name="NoteExtraction.ExtractPitch" xml:space="preserve"><value>提取音高曲线</value></data>
+  <data name="NoteExtraction.PitchModel" xml:space="preserve"><value>音高模型</value></data>
+  <data name="NoteExtraction.TalkloidReady" xml:space="preserve"><value>talkloid：已内置</value></data>
+  <data name="NoteExtraction.TalkloidMissing" xml:space="preserve"><value>无法加载内置的 TalkLoid 音高模型</value></data>
+  <data name="NoteExtraction.ExtractLyrics" xml:space="preserve"><value>使用 Moonshine 识别歌词</value></data>
+  <data name="NoteExtraction.MoonshineInstalled" xml:space="preserve"><value>moonshine-tiny：已安装</value></data>
+  <data name="NoteExtraction.MoonshineMissing" xml:space="preserve"><value>需将 Moonshine tiny 的 ONNX 文件与 tokenizer.json 放入 moonshine-tiny 依赖目录才能识别歌词</value></data>
+  <data name="NoteExtraction.TranscribingLyrics" xml:space="preserve"><value>正在识别歌词…</value></data>
   <data name="NoteExtraction.Universal" xml:space="preserve"><value>通用</value></data>
   <data name="NoteExtraction.Language" xml:space="preserve"><value>语言</value></data>
   <data name="NoteExtraction.SamplingSteps" xml:space="preserve"><value>采样步数</value></data>
