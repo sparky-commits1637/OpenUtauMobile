@@ -51,6 +51,7 @@
                             <TextBlock Text="{DynamicResource NoteExtraction.ExtractLyrics}" TextWrapping="Wrap" />
                         </CheckBox>
                         <TextBlock Classes="Hint" Text="{Binding MoonshineStatus}" />
+                        <TextBlock Classes="Hint" Text="{Binding AlignerStatus}" />
                     </StackPanel>
                     <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto"
                           ColumnSpacing="{x:Static foundation:LayoutTokens.SpaceM}" RowSpacing="{x:Static foundation:LayoutTokens.SpaceS}">

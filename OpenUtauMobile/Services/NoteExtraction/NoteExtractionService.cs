@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using OpenUtau.Core.Analysis;
 using OpenUtau.Core.Ustx;
+using Serilog;
 
 namespace OpenUtauMobile.Services.NoteExtraction;
 
@@ -159,31 +160,85 @@ internal static class NoteExtractionService
     {
         cancellation.ThrowIfCancellationRequested();
         if (result.notes.Count == 0) return;
-        using MoonshineTranscriber moonshine = new();
-        using CancellationTokenRegistration registration = cancellation.Register(moonshine.Interrupt);
         double durationMs = project.timeAxis.MsBetweenTickPos(source.position, source.End);
         double skipMs = source.GetSkipMs(project);
         double windowMs = MoonshineTranscriber.MaxSegmentSeconds * 1000;
         UNote[] notes = [.. result.notes.OrderBy(note => note.position)];
         double[] noteStartMs = [.. notes.Select(note =>
             project.timeAxis.MsBetweenTickPos(source.position, source.position + note.position))];
-        for (double offset = 0; offset < durationMs; offset += windowMs)
+        double[] noteEndMs = [.. notes.Select(note =>
+            project.timeAxis.MsBetweenTickPos(source.position, source.position + note.End))];
+        // 装有 wav2vec2 时按时间对齐歌词，否则退回按顺序分配。
+        bool align = Wav2Vec2Aligner.IsInstalled();
+
+        // 第一遍：Moonshine 逐窗识别文本。识别完立即释放，再加载对齐模型，避免两套模型同时占内存。
+        List<(double Offset, double End, int[] NoteIndexes, string Text)> windows = [];
+        using (MoonshineTranscriber moonshine = new())
+        using (cancellation.Register(moonshine.Interrupt))
         {
-            cancellation.ThrowIfCancellationRequested();
-            double end = Math.Min(offset + windowMs, durationMs);
-            List<UNote> windowNotes = [];
-            for (int i = 0; i < notes.Length; i++)
+            for (double offset = 0; offset < durationMs; offset += windowMs)
             {
-                if (noteStartMs[i] >= offset && noteStartMs[i] < end) windowNotes.Add(notes[i]);
-            }
-            if (windowNotes.Count > 0)
-            {
-                float[] audio = ExtractionAudio.ReadMono(source, skipMs + offset, skipMs + end, MoonshineTranscriber.SampleRate);
-                string text = moonshine.Transcribe(audio);
                 cancellation.ThrowIfCancellationRequested();
-                LyricAssigner.Assign(windowNotes, LyricAssigner.SplitSyllables(text));
+                double end = Math.Min(offset + windowMs, durationMs);
+                int[] indexes = [.. Enumerable.Range(0, notes.Length).Where(i => noteStartMs[i] >= offset && noteStartMs[i] < end)];
+                if (indexes.Length > 0)
+                {
+                    float[] audio = ExtractionAudio.ReadMono(source, skipMs + offset, skipMs + end, MoonshineTranscriber.SampleRate);
+                    string text = moonshine.Transcribe(audio);
+                    cancellation.ThrowIfCancellationRequested();
+                    windows.Add((offset, end, indexes, text));
+                }
+                progress((int)(end * (align ? 0.5 : 1)), (int)durationMs);
             }
-            progress((int)end, (int)durationMs);
+        }
+
+        // 第二遍：对齐（或按顺序分配）。
+        Wav2Vec2Aligner? aligner = null;
+        CancellationTokenRegistration registration = default;
+        try
+        {
+            if (align)
+            {
+                try
+                {
+                    aligner = new Wav2Vec2Aligner();
+                    registration = cancellation.Register(aligner.Interrupt);
+                }
+                catch (Exception ex) when (ex is not OperationCanceledException)
+                {
+                    Log.Warning(ex, "wav2vec2 aligner failed to load; falling back to in-order lyrics.");
+                }
+            }
+            foreach ((double offset, double end, int[] indexes, string text) in windows)
+            {
+                cancellation.ThrowIfCancellationRequested();
+                UNote[] windowNotes = [.. indexes.Select(i => notes[i])];
+                List<List<string>> words = LyricAssigner.SplitWords(text);
+                TimedSyllable[]? timed = null;
+                if (aligner != null && words.Count > 0)
+                {
+                    float[] audio = ExtractionAudio.ReadMono(source, skipMs + offset, skipMs + end, Wav2Vec2Aligner.SampleRate);
+                    timed = aligner.Align(audio, words);
+                    cancellation.ThrowIfCancellationRequested();
+                }
+                if (timed != null)
+                {
+                    LyricAssigner.AssignTimed(windowNotes,
+                        [.. indexes.Select(i => (noteStartMs[i] - offset) / 1000)],
+                        [.. indexes.Select(i => (noteEndMs[i] - offset) / 1000)],
+                        timed);
+                }
+                else
+                {
+                    LyricAssigner.Assign(windowNotes, LyricAssigner.SplitSyllables(text));
+                }
+                if (align) progress((int)(durationMs * 0.5 + end * 0.5), (int)durationMs);
+            }
+        }
+        finally
+        {
+            registration.Dispose();
+            aligner?.Dispose();
         }
     }
 

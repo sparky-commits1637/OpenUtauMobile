@@ -29,6 +29,10 @@ public sealed class NoteExtractionPopupViewModel : PopupViewModelBase
         ? L.S(TalkloidAvailable ? "NoteExtraction.TalkloidReady" : "NoteExtraction.TalkloidMissing")
         : RmvpeStatus;
     public string MoonshineStatus => L.S(MoonshineAvailable ? "NoteExtraction.MoonshineInstalled" : "NoteExtraction.MoonshineMissing");
+    /// <summary>歌词时间对齐（wav2vec2）是否已安装；未安装时歌词按顺序分配。</summary>
+    public string AlignerStatus => Wav2Vec2Aligner.IsInstalled()
+        ? LocalizedText.S("NoteExtraction.AlignerInstalled", "wav2vec2: installed — lyrics are placed by timing")
+        : LocalizedText.S("NoteExtraction.AlignerMissing", "wav2vec2 not installed — lyrics are placed in order (install the wav2vec2 package for timing)");
     public IReadOnlyList<NoteExtractionPitchModel> PitchModels { get; }
     public IReadOnlyList<NoteExtractionLanguage> Languages { get; }
     public IReadOnlyList<int> SamplingStepOptions { get; } = [1, 2, 4, 8, 16];
