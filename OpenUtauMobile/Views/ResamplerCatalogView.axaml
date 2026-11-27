@@ -1,0 +1,90 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:OpenUtauMobile.ViewModels"
+             xmlns:views="clr-namespace:OpenUtauMobile.Views"
+             xmlns:iconPacks="https://github.com/MahApps/IconPacks.Avalonia"
+             xmlns:foundation="clr-namespace:OpenUtauMobile.Themes.OpenUtauMobile.Tokens.Foundation"
+             xmlns:semantic="clr-namespace:OpenUtauMobile.Themes.OpenUtauMobile.Tokens.Semantic"
+             mc:Ignorable="d"
+             x:Class="OpenUtauMobile.Views.ResamplerCatalogView"
+             x:DataType="vm:ResamplerCatalogViewModel">
+
+    <UserControl.Styles>
+        <StyleInclude Source="/Views/Styles/DependencyManagerView.axaml" />
+    </UserControl.Styles>
+
+    <Panel Background="{DynamicResource Sem.Color.Surface}">
+        <DockPanel>
+            <!-- 顶栏：返回、标题、刷新 -->
+            <Border DockPanel.Dock="Top" Classes="TopBar">
+                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="{x:Static foundation:LayoutTokens.SpaceS}">
+                    <Button Grid.Column="0" Classes="TopBarBtn"
+                            Command="{Binding BackCommand}"
+                            ToolTip.Tip="{DynamicResource Common.Back}"
+                            Content="{iconPacks:PhosphorIcons ArrowLeft}" />
+                    <TextBlock Grid.Column="1" Classes="TopBarTitle"
+                               Text="{DynamicResource ResamplerCatalog.Title}" />
+                    <Button Grid.Column="2" Classes="TopBarBtn"
+                            Command="{Binding RefreshCommand}"
+                            Content="{iconPacks:PhosphorIcons ArrowsClockwise}" />
+                </Grid>
+            </Border>
+
+            <!-- 加载指示 -->
+            <ProgressBar DockPanel.Dock="Top" Classes="TopBarLoading" IsVisible="{Binding IsLoading}" />
+
+            <TabControl SelectedIndex="{Binding SelectedTabIndex}" Classes="DependencyTabs">
+                <!-- Tab 0：开发者发布的在线目录 -->
+                <TabItem Header="{DynamicResource ResamplerCatalog.Tab.Catalog}">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                        <Border Padding="24,16,24,24">
+                            <StackPanel Classes="DependencyPageContent">
+                                <TextBlock Text="{Binding Error}" IsVisible="{Binding Error, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                           TextWrapping="Wrap" Opacity="0.72" />
+                                <ItemsControl ItemsSource="{Binding Items}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate x:DataType="vm:CatalogResamplerItemViewModel">
+                                            <!-- 单个目录条目卡片 -->
+                                            <Border Classes="DependencyCard" Margin="0,0,0,8">
+                                                <StackPanel Spacing="{x:Static foundation:LayoutTokens.SpaceXS}">
+                                                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold"
+                                                               FontSize="{x:Static semantic:TypographyTokens.BodyLSize}" />
+                                                    <TextBlock Text="{Binding Description}" TextWrapping="Wrap" Opacity="0.72"
+                                                               FontSize="{x:Static semantic:TypographyTokens.LabelSSize}" />
+                                                    <TextBlock Text="{Binding Author}" Opacity="0.5"
+                                                               FontSize="{x:Static semantic:TypographyTokens.LabelSSize}" />
+                                                    <ProgressBar Minimum="0" Maximum="1" Value="{Binding Progress}" IsVisible="{Binding IsBusy}" />
+                                                    <StackPanel Orientation="Horizontal" Spacing="{x:Static foundation:LayoutTokens.SpaceS}">
+                                                        <Button Classes="outlined" Command="{Binding InstallCommand}"
+                                                                IsEnabled="{Binding !IsBusy}"
+                                                                Content="{DynamicResource ResamplerCatalog.Install}"
+                                                                IsVisible="{Binding !IsInstalled}" />
+                                                        <Button Classes="outlined" Command="{Binding InstallCommand}"
+                                                                IsEnabled="{Binding !IsBusy}"
+                                                                Content="{DynamicResource ResamplerCatalog.Update}"
+                                                                IsVisible="{Binding HasUpdate}" />
+                                                        <Button Classes="outlined" Command="{Binding RemoveCommand}"
+                                                                IsEnabled="{Binding !IsBusy}"
+                                                                Content="{DynamicResource ResamplerCatalog.Remove}"
+                                                                IsVisible="{Binding IsInstalled}" />
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Border>
+                    </ScrollViewer>
+                </TabItem>
+
+                <!-- Tab 1：用户自己添加的重采样器（原自定义重采样器管理页） -->
+                <TabItem Header="{DynamicResource ResamplerCatalog.Tab.Own}">
+                    <views:ResamplerManagerView DataContext="{Binding Manager}" />
+                </TabItem>
+            </TabControl>
+        </DockPanel>
+    </Panel>
+</UserControl>

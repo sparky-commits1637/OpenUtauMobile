@@ -3,6 +3,9 @@ using OpenUtau.Core.Analysis;
 
 namespace OpenUtauMobile.Services.NoteExtraction;
 
+/// <summary>音高曲线提取所用的模型。</summary>
+public enum NotePitchModel { Rmvpe, Talkloid }
+
 internal sealed record NoteExtractionSettings(
     bool ExtractPitch = false,
     string? LanguageCode = null,
@@ -11,7 +14,9 @@ internal sealed record NoteExtractionSettings(
     int BoundaryRadius = 2,
     float ScoreThreshold = 0.2f,
     int BatchSize = 1,
-    float MaxBatchDuration = 60)
+    float MaxBatchDuration = 60,
+    NotePitchModel PitchModel = NotePitchModel.Rmvpe,
+    bool ExtractLyrics = false)
 {
     public void Validate()
     {

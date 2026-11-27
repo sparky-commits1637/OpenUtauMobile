@@ -1639,6 +1639,27 @@
   <data name="BatchEdit.Action.LoadRenderedPitch" xml:space="preserve">
     <value>载入渲染音高</value>
   </data>
+  <data name="BatchEdit.Action.AutoPitch" xml:space="preserve">
+    <value>自动音高</value>
+  </data>
+  <data name="BatchEdit.Action.HarmonyGenerator" xml:space="preserve">
+    <value>和声生成</value>
+  </data>
+  <data name="BatchEdit.Parameter.Voices" xml:space="preserve">
+    <value>声部数</value>
+  </data>
+  <data name="BatchEdit.Action.HarmonyGenerator.Pop" xml:space="preserve">
+    <value>和声生成：流行</value>
+  </data>
+  <data name="BatchEdit.Action.HarmonyGenerator.Choir" xml:space="preserve">
+    <value>和声生成：合唱</value>
+  </data>
+  <data name="BatchEdit.Action.HarmonyGenerator.Cinematic" xml:space="preserve">
+    <value>和声生成：电影感</value>
+  </data>
+  <data name="BatchEdit.Action.HarmonyGenerator.Human" xml:space="preserve">
+    <value>和声生成：真人随机</value>
+  </data>
   <data name="BatchEdit.Action.BakePitch" xml:space="preserve">
     <value>烘焙音高</value>
   </data>
@@ -1914,7 +1935,14 @@
   <data name="NoteExtraction.LanguageUnavailable" xml:space="preserve"><value>不支持所选语言</value></data>
   <data name="NoteExtraction.RmvpeInstalled" xml:space="preserve"><value>rmvpe：已安装</value></data>
   <data name="NoteExtraction.RmvpeMissing" xml:space="preserve"><value>需安装 rmvpe 依赖项才能提取音高</value></data>
-  <data name="NoteExtraction.ExtractPitch" xml:space="preserve"><value>使用 RMVPE 提取音高曲线</value></data>
+  <data name="NoteExtraction.ExtractPitch" xml:space="preserve"><value>提取音高曲线</value></data>
+  <data name="NoteExtraction.PitchModel" xml:space="preserve"><value>音高模型</value></data>
+  <data name="NoteExtraction.TalkloidReady" xml:space="preserve"><value>talkloid：已内置</value></data>
+  <data name="NoteExtraction.TalkloidMissing" xml:space="preserve"><value>无法加载内置的 TalkLoid 音高模型</value></data>
+  <data name="NoteExtraction.ExtractLyrics" xml:space="preserve"><value>使用 Moonshine 识别歌词</value></data>
+  <data name="NoteExtraction.MoonshineInstalled" xml:space="preserve"><value>moonshine-tiny：已安装</value></data>
+  <data name="NoteExtraction.MoonshineMissing" xml:space="preserve"><value>需将 Moonshine tiny 的 ONNX 文件与 tokenizer.json 放入 moonshine-tiny 依赖目录才能识别歌词</value></data>
+  <data name="NoteExtraction.TranscribingLyrics" xml:space="preserve"><value>正在识别歌词…</value></data>
   <data name="NoteExtraction.Universal" xml:space="preserve"><value>通用</value></data>
   <data name="NoteExtraction.Language" xml:space="preserve"><value>语言</value></data>
   <data name="NoteExtraction.SamplingSteps" xml:space="preserve"><value>采样步数</value></data>
@@ -2274,6 +2302,99 @@
   </data>
   <data name="PluginManager.CancelDeletionFailed" xml:space="preserve">
     <value>取消删除标记失败</value>
+  </data>
+  <data name="Options.ResamplerManager" xml:space="preserve">
+    <value>自定义重采样器</value>
+  </data>
+  <data name="Options.ResamplerManager.Desc" xml:space="preserve">
+    <value>添加和移除外部重采样器</value>
+  </data>
+  <data name="ResamplerManager.Title" xml:space="preserve">
+    <value>自定义重采样器</value>
+  </data>
+  <data name="ResamplerManager.Add" xml:space="preserve">
+    <value>添加重采样器</value>
+  </data>
+  <data name="ResamplerManager.Empty" xml:space="preserve">
+    <value>还没有自定义重采样器，点按 + 添加。</value>
+  </data>
+  <data name="ResamplerManager.Hint" xml:space="preserve">
+    <value>支持的文件：{0}。添加后可在轨道渲染设置中选用。列入此处不代表程序一定能在本设备上运行。</value>
+  </data>
+  <data name="ResamplerManager.NoExtension" xml:space="preserve">
+    <value>无扩展名</value>
+  </data>
+  <data name="ResamplerManager.SelectFile" xml:space="preserve">
+    <value>选择重采样器</value>
+  </data>
+  <data name="ResamplerManager.RefreshFailed" xml:space="preserve">
+    <value>读取重采样器失败：{0}</value>
+  </data>
+  <data name="ResamplerManager.Available" xml:space="preserve">
+    <value>可在轨道渲染设置中选用</value>
+  </data>
+  <data name="ResamplerManager.Unavailable" xml:space="preserve">
+    <value>本设备未能加载</value>
+  </data>
+  <data name="ResamplerManager.UnsupportedFile" xml:space="preserve">
+    <value>本设备无法加载此类型的文件。</value>
+  </data>
+  <data name="ResamplerManager.BuiltinNotAllowed" xml:space="preserve">
+    <value>该名称已被内置重采样器占用，请重命名文件后重试。</value>
+  </data>
+  <data name="ResamplerManager.AlreadyInstalled" xml:space="preserve">
+    <value>该文件已位于重采样器目录中。</value>
+  </data>
+  <data name="ResamplerManager.TrustTitle" xml:space="preserve">
+    <value>添加重采样器？</value>
+  </data>
+  <data name="ResamplerManager.TrustQuestion" xml:space="preserve">
+    <value>要添加“{0}”吗？</value>
+  </data>
+  <data name="ResamplerManager.TrustMessage" xml:space="preserve">
+    <value>重采样器是会在你的设备上运行的外部程序，请仅添加来源可信的文件。</value>
+  </data>
+  <data name="ResamplerManager.Continue" xml:space="preserve">
+    <value>添加</value>
+  </data>
+  <data name="ResamplerManager.ReplaceTitle" xml:space="preserve">
+    <value>替换重采样器？</value>
+  </data>
+  <data name="ResamplerManager.ReplaceMessage" xml:space="preserve">
+    <value>“{0}”已存在，要用所选文件替换吗？</value>
+  </data>
+  <data name="ResamplerManager.Replace" xml:space="preserve">
+    <value>替换</value>
+  </data>
+  <data name="ResamplerManager.Installing" xml:space="preserve">
+    <value>正在添加重采样器…</value>
+  </data>
+  <data name="ResamplerManager.Completed" xml:space="preserve">
+    <value>完成</value>
+  </data>
+  <data name="ResamplerManager.InstallFailed" xml:space="preserve">
+    <value>添加重采样器失败</value>
+  </data>
+  <data name="ResamplerManager.Installed" xml:space="preserve">
+    <value>已添加重采样器</value>
+  </data>
+  <data name="ResamplerManager.DeleteTitle" xml:space="preserve">
+    <value>移除重采样器？</value>
+  </data>
+  <data name="ResamplerManager.DeleteMessage" xml:space="preserve">
+    <value>要移除“{0}”及其清单吗？使用它的工程将回退到默认重采样器。</value>
+  </data>
+  <data name="ResamplerManager.DeleteFailed" xml:space="preserve">
+    <value>移除重采样器失败</value>
+  </data>
+  <data name="ResamplerManager.Removing" xml:space="preserve">
+    <value>正在移除重采样器…</value>
+  </data>
+  <data name="ResamplerManager.Removed" xml:space="preserve">
+    <value>已移除重采样器</value>
+  </data>
+  <data name="ResamplerManager.CloseProjectFirst" xml:space="preserve">
+    <value>请先关闭当前打开的工程，再修改重采样器。</value>
   </data>
   <data name="Desktop.Workspace" xml:space="preserve"><value>工作区</value></data>
   <data name="Desktop.Arrangement" xml:space="preserve"><value>编曲</value></data>
@@ -2722,4 +2843,127 @@
   <data name="PluginDetails.ContractVersion" xml:space="preserve"><value>契约版本</value></data>
   <data name="PluginDetails.Phonemizer" xml:space="preserve"><value>音素器</value></data>
   <data name="PluginDetails.BatchEdit" xml:space="preserve"><value>批量编辑工具</value></data>
+  <data name="EditorMore.ExportPianoRollVideo" xml:space="preserve">
+    <value>导出钢琴卷帘视频</value>
+  </data>
+  <data name="ExportVideoPopup.Title" xml:space="preserve">
+    <value>钢琴卷帘视频</value>
+  </data>
+  <data name="ExportVideoPopup.PathLabel" xml:space="preserve">
+    <value>保存位置</value>
+  </data>
+  <data name="ExportVideoPopup.SelectPath" xml:space="preserve">
+    <value>选择文件…</value>
+  </data>
+  <data name="ExportVideoPopup.SaveDialogTitle" xml:space="preserve">
+    <value>保存钢琴卷帘视频</value>
+  </data>
+  <data name="ExportVideoPopup.PathRequired" xml:space="preserve">
+    <value>请先选择视频的保存位置。</value>
+  </data>
+  <data name="ExportVideoPopup.AspectLabel" xml:space="preserve">
+    <value>画幅</value>
+  </data>
+  <data name="ExportVideoPopup.Aspect.Landscape" xml:space="preserve">
+    <value>横屏 1920×1080</value>
+  </data>
+  <data name="ExportVideoPopup.Aspect.Portrait" xml:space="preserve">
+    <value>竖屏 1080×1920</value>
+  </data>
+  <data name="ExportVideoPopup.Aspect.Custom" xml:space="preserve">
+    <value>自定义</value>
+  </data>
+  <data name="ExportVideoPopup.Width" xml:space="preserve">
+    <value>宽度</value>
+  </data>
+  <data name="ExportVideoPopup.Height" xml:space="preserve">
+    <value>高度</value>
+  </data>
+  <data name="ExportVideoPopup.ShowPortrait" xml:space="preserve">
+    <value>显示歌手立绘</value>
+  </data>
+  <data name="ExportVideoPopup.IncludeAudio" xml:space="preserve">
+    <value>包含工程音频</value>
+  </data>
+  <data name="ExportVideoPopup.Fps60" xml:space="preserve">
+    <value>60 帧（渲染更慢）</value>
+  </data>
+  <data name="ExportVideoPopup.Hint" xml:space="preserve">
+    <value>视频为离线逐帧渲染，较长的歌曲需要一些时间，请在完成前保持应用打开。</value>
+  </data>
+  <data name="ExportVideoPopup.Start" xml:space="preserve">
+    <value>导出</value>
+  </data>
+  <data name="ExportVideoPopup.Exporting" xml:space="preserve">
+    <value>正在渲染视频…</value>
+  </data>
+  <data name="ExportVideoPopup.NoEncoder" xml:space="preserve">
+    <value>当前平台不支持视频导出。</value>
+  </data>
+  <data name="ExportVideoPopup.Toast.Success" xml:space="preserve">
+    <value>钢琴卷帘视频已保存。</value>
+  </data>
+  <data name="ExportVideoPopup.Toast.Cancelled" xml:space="preserve">
+    <value>已取消视频导出。</value>
+  </data>
+  <data name="ExportVideoPopup.Toast.Failed" xml:space="preserve">
+    <value>视频导出失败。</value>
+  </data>
+  <data name="Options.ResamplerCatalog" xml:space="preserve">
+    <value>重采样器</value>
+  </data>
+  <data name="Options.ResamplerCatalog.Desc" xml:space="preserve">
+    <value>下载现成的重采样器，或添加自己的</value>
+  </data>
+  <data name="ResamplerCatalog.Title" xml:space="preserve">
+    <value>重采样器</value>
+  </data>
+  <data name="ResamplerCatalog.Tab.Catalog" xml:space="preserve">
+    <value>在线目录</value>
+  </data>
+  <data name="ResamplerCatalog.Tab.Own" xml:space="preserve">
+    <value>我自己的</value>
+  </data>
+  <data name="ResamplerCatalog.Install" xml:space="preserve">
+    <value>下载</value>
+  </data>
+  <data name="ResamplerCatalog.Update" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="ResamplerCatalog.Remove" xml:space="preserve">
+    <value>移除</value>
+  </data>
+  <data name="ResamplerCatalog.Installed" xml:space="preserve">
+    <value>已安装</value>
+  </data>
+  <data name="ResamplerCatalog.Source" xml:space="preserve">
+    <value>来源</value>
+  </data>
+  <data name="ResamplerCatalog.AddFromFile" xml:space="preserve">
+    <value>从文件添加</value>
+  </data>
+  <data name="ResamplerCatalog.OwnEmpty" xml:space="preserve">
+    <value>还没有自己添加的重采样器。点按文件按钮添加 .sh 重采样器。</value>
+  </data>
+  <data name="ResamplerCatalog.Error.Load" xml:space="preserve">
+    <value>无法加载目录。请检查网络后刷新。</value>
+  </data>
+  <data name="ResamplerCatalog.Toast.Installed" xml:space="preserve">
+    <value>重采样器已就绪</value>
+  </data>
+  <data name="ResamplerCatalog.Toast.Failed" xml:space="preserve">
+    <value>失败：</value>
+  </data>
+  <data name="ResamplerCatalog.FilePicker.Title" xml:space="preserve">
+    <value>选择重采样器</value>
+  </data>
+  <data name="RendererSettings.Resampler.Test" xml:space="preserve">
+    <value>测试重采样器</value>
+  </data>
+  <data name="SingerDetail.CheckVoicebank" xml:space="preserve">
+    <value>检查声库</value>
+  </data>
+  <data name="EditorMore.ForceRerender" xml:space="preserve">
+    <value>强制重新渲染</value>
+  </data>
 </root>

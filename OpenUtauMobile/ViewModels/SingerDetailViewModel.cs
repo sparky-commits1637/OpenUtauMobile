@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reactive;
 using System.Threading.Tasks;
@@ -19,6 +20,8 @@ public class SingerDetailViewModel : NavigateViewModelBase, IDisposable
     public ReactiveCommand<Unit, Unit> BackCommand { get; }
     public ReactiveCommand<Unit, Unit> DeleteCommand { get; }
     public ReactiveCommand<Unit, Unit> OpenWebCommand { get; }
+    /// <summary>检查当前声库的健康状况，并用普通人能读懂的文字显示报告。</summary>
+    public ReactiveCommand<Unit, Unit> CheckVoicebankCommand { get; }
     public event Action<USinger>? SingerUninstalled;
 
     private USinger _singer;
@@ -70,6 +73,7 @@ public class SingerDetailViewModel : NavigateViewModelBase, IDisposable
         // Create OpenWebCommand - enabled only when HasWeb is true
         IObservable<bool> canOpenWeb = this.WhenAnyValue(x => x.HasWeb);
         OpenWebCommand = ReactiveCommand.CreateFromTask(OnOpenWebAsync, canOpenWeb);
+        CheckVoicebankCommand = ReactiveCommand.CreateFromTask(OnCheckVoicebankAsync);
 
         IsFavorite = _singer.IsFavourite;
 
@@ -86,7 +90,7 @@ public class SingerDetailViewModel : NavigateViewModelBase, IDisposable
         _favoriteSubscription.Dispose();
         AvatarBitmap?.Dispose();
         AvatarBitmap = null;
-        BackCommand.Dispose(); DeleteCommand.Dispose(); OpenWebCommand.Dispose();
+        BackCommand.Dispose(); DeleteCommand.Dispose(); OpenWebCommand.Dispose(); CheckVoicebankCommand.Dispose();
     }
 
     /// <summary>重新进入详情时换用刷新后的实例；已删除的歌手返回管理页。</summary>
@@ -145,6 +149,14 @@ public class SingerDetailViewModel : NavigateViewModelBase, IDisposable
             SingerUninstalled?.Invoke(_singer);
             Navigator.NavigateBack(this);
         }
+    }
+
+    /// <summary>在后台检查声库，完成后用弹窗展示报告。</summary>
+    private async Task OnCheckVoicebankAsync()
+    {
+        Services.VoicebankCheckReport report = await Services.VoicebankCheckService.CheckAsync(_singer);
+        IReadOnlyList<string> options = [LocalizedText.S("VoicebankCheck.Close", "Close")];
+        await OptionConfirmPopupService.ShowAsync(report.Title, report.Text, options);
     }
 
     private async Task OnOpenWebAsync()

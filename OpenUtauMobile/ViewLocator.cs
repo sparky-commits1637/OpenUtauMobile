@@ -28,6 +28,8 @@ public class ViewLocator : IDataTemplate
         [typeof(PluginManagerViewModel)] = static () => new PluginManagerView(),
         [typeof(PluginSingerSetupViewModel)] = static () => new PluginSingerSetupView(),
         [typeof(PluginWebSettingsViewModel)] = static () => new PluginWebSettingsView(),
+        [typeof(ResamplerManagerViewModel)] = static () => new ResamplerManagerView(),
+        [typeof(ResamplerCatalogViewModel)] = static () => new ResamplerCatalogView(),
         [typeof(SandboxFileManagerViewModel)] = static () => new SandboxFileManagerView(),
         [typeof(SettingsViewModel)] = static () => new SettingsView(),
         [typeof(SingerDetailViewModel)] = static () => new SingerDetailView(),

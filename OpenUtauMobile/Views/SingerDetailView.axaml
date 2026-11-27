@@ -145,6 +145,11 @@
 
                         </Grid>
 
+                        <!-- 声库检查按钮：生成普通人能读懂的声库健康报告 -->
+                        <Button Classes="tonal" HorizontalAlignment="Stretch"
+                                Command="{Binding CheckVoicebankCommand}"
+                                Content="{DynamicResource SingerDetail.CheckVoicebank}" />
+
                         <!-- 鈹€鈹€ Details Card 鈹€鈹€ -->
                         <shared:SingerDetailInfo />
 

@@ -1639,6 +1639,27 @@
   <data name="BatchEdit.Action.LoadRenderedPitch" xml:space="preserve">
     <value>Load rendered pitch</value>
   </data>
+  <data name="BatchEdit.Action.AutoPitch" xml:space="preserve">
+    <value>Auto pitch</value>
+  </data>
+  <data name="BatchEdit.Action.HarmonyGenerator" xml:space="preserve">
+    <value>Harmony generator</value>
+  </data>
+  <data name="BatchEdit.Parameter.Voices" xml:space="preserve">
+    <value>Voices</value>
+  </data>
+  <data name="BatchEdit.Action.HarmonyGenerator.Pop" xml:space="preserve">
+    <value>Harmony generator: Pop</value>
+  </data>
+  <data name="BatchEdit.Action.HarmonyGenerator.Choir" xml:space="preserve">
+    <value>Harmony generator: Choir</value>
+  </data>
+  <data name="BatchEdit.Action.HarmonyGenerator.Cinematic" xml:space="preserve">
+    <value>Harmony generator: Cinematic</value>
+  </data>
+  <data name="BatchEdit.Action.HarmonyGenerator.Human" xml:space="preserve">
+    <value>Harmony generator: Human</value>
+  </data>
   <data name="BatchEdit.Action.BakePitch" xml:space="preserve">
     <value>Bake pitch</value>
   </data>
@@ -1914,7 +1935,14 @@
   <data name="NoteExtraction.LanguageUnavailable" xml:space="preserve"><value>Language unsupported</value></data>
   <data name="NoteExtraction.RmvpeInstalled" xml:space="preserve"><value>rmvpe: installed</value></data>
   <data name="NoteExtraction.RmvpeMissing" xml:space="preserve"><value>Install the rmvpe dependency to extract pitch</value></data>
-  <data name="NoteExtraction.ExtractPitch" xml:space="preserve"><value>Extract pitch curve with RMVPE</value></data>
+  <data name="NoteExtraction.ExtractPitch" xml:space="preserve"><value>Extract pitch curve</value></data>
+  <data name="NoteExtraction.PitchModel" xml:space="preserve"><value>Pitch model</value></data>
+  <data name="NoteExtraction.TalkloidReady" xml:space="preserve"><value>talkloid: built in</value></data>
+  <data name="NoteExtraction.TalkloidMissing" xml:space="preserve"><value>The built-in TalkLoid pitch model could not be loaded</value></data>
+  <data name="NoteExtraction.ExtractLyrics" xml:space="preserve"><value>Transcribe lyrics with Moonshine</value></data>
+  <data name="NoteExtraction.MoonshineInstalled" xml:space="preserve"><value>moonshine-tiny: installed</value></data>
+  <data name="NoteExtraction.MoonshineMissing" xml:space="preserve"><value>To transcribe lyrics, put the Moonshine tiny ONNX files and tokenizer.json in the moonshine-tiny dependency folder</value></data>
+  <data name="NoteExtraction.TranscribingLyrics" xml:space="preserve"><value>Transcribing lyrics…</value></data>
   <data name="NoteExtraction.Universal" xml:space="preserve"><value>Universal</value></data>
   <data name="NoteExtraction.Language" xml:space="preserve"><value>Language</value></data>
   <data name="NoteExtraction.SamplingSteps" xml:space="preserve"><value>Sampling steps</value></data>
@@ -2119,6 +2147,15 @@
   <data name="RendererSettings.Resampler" xml:space="preserve">
     <value>Resampler</value>
   </data>
+  <data name="RendererSettings.Resampler.Test" xml:space="preserve">
+    <value>Test resampler</value>
+  </data>
+  <data name="SingerDetail.CheckVoicebank" xml:space="preserve">
+    <value>Check voicebank</value>
+  </data>
+  <data name="EditorMore.ForceRerender" xml:space="preserve">
+    <value>Force re-render</value>
+  </data>
   <data name="RendererSettings.Wavtool" xml:space="preserve">
     <value>Wavtool</value>
   </data>
@@ -2274,6 +2311,99 @@
   </data>
   <data name="PluginManager.CancelDeletionFailed" xml:space="preserve">
     <value>Failed to undo deletion</value>
+  </data>
+  <data name="Options.ResamplerManager" xml:space="preserve">
+    <value>Custom resamplers</value>
+  </data>
+  <data name="Options.ResamplerManager.Desc" xml:space="preserve">
+    <value>Add and remove external resamplers</value>
+  </data>
+  <data name="ResamplerManager.Title" xml:space="preserve">
+    <value>Custom resamplers</value>
+  </data>
+  <data name="ResamplerManager.Add" xml:space="preserve">
+    <value>Add resampler</value>
+  </data>
+  <data name="ResamplerManager.Empty" xml:space="preserve">
+    <value>No custom resamplers yet. Tap + to add one.</value>
+  </data>
+  <data name="ResamplerManager.Hint" xml:space="preserve">
+    <value>Supported files: {0}. Added resamplers appear in track render settings. Being listed doesn't guarantee a program runs on this device.</value>
+  </data>
+  <data name="ResamplerManager.NoExtension" xml:space="preserve">
+    <value>no extension</value>
+  </data>
+  <data name="ResamplerManager.SelectFile" xml:space="preserve">
+    <value>Select a resampler</value>
+  </data>
+  <data name="ResamplerManager.RefreshFailed" xml:space="preserve">
+    <value>Failed to read resamplers: {0}</value>
+  </data>
+  <data name="ResamplerManager.Available" xml:space="preserve">
+    <value>Available in track render settings</value>
+  </data>
+  <data name="ResamplerManager.Unavailable" xml:space="preserve">
+    <value>Not loaded on this device</value>
+  </data>
+  <data name="ResamplerManager.UnsupportedFile" xml:space="preserve">
+    <value>This device can't load this file type.</value>
+  </data>
+  <data name="ResamplerManager.BuiltinNotAllowed" xml:space="preserve">
+    <value>This name is reserved by a built-in resampler. Rename the file and try again.</value>
+  </data>
+  <data name="ResamplerManager.AlreadyInstalled" xml:space="preserve">
+    <value>This file is already in the resampler folder.</value>
+  </data>
+  <data name="ResamplerManager.TrustTitle" xml:space="preserve">
+    <value>Add resampler?</value>
+  </data>
+  <data name="ResamplerManager.TrustQuestion" xml:space="preserve">
+    <value>Add “{0}”?</value>
+  </data>
+  <data name="ResamplerManager.TrustMessage" xml:space="preserve">
+    <value>Resamplers are external programs that run on your device. Only add files from sources you trust.</value>
+  </data>
+  <data name="ResamplerManager.Continue" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="ResamplerManager.ReplaceTitle" xml:space="preserve">
+    <value>Replace resampler?</value>
+  </data>
+  <data name="ResamplerManager.ReplaceMessage" xml:space="preserve">
+    <value>“{0}” is already added. Replace it with the selected file?</value>
+  </data>
+  <data name="ResamplerManager.Replace" xml:space="preserve">
+    <value>Replace</value>
+  </data>
+  <data name="ResamplerManager.Installing" xml:space="preserve">
+    <value>Adding resampler…</value>
+  </data>
+  <data name="ResamplerManager.Completed" xml:space="preserve">
+    <value>Done</value>
+  </data>
+  <data name="ResamplerManager.InstallFailed" xml:space="preserve">
+    <value>Failed to add the resampler</value>
+  </data>
+  <data name="ResamplerManager.Installed" xml:space="preserve">
+    <value>Resampler added</value>
+  </data>
+  <data name="ResamplerManager.DeleteTitle" xml:space="preserve">
+    <value>Remove resampler?</value>
+  </data>
+  <data name="ResamplerManager.DeleteMessage" xml:space="preserve">
+    <value>Remove “{0}” and its manifest? Projects that use it will fall back to the default resampler.</value>
+  </data>
+  <data name="ResamplerManager.DeleteFailed" xml:space="preserve">
+    <value>Failed to remove the resampler</value>
+  </data>
+  <data name="ResamplerManager.Removing" xml:space="preserve">
+    <value>Removing resampler…</value>
+  </data>
+  <data name="ResamplerManager.Removed" xml:space="preserve">
+    <value>Resampler removed</value>
+  </data>
+  <data name="ResamplerManager.CloseProjectFirst" xml:space="preserve">
+    <value>Close the open project before changing resamplers.</value>
   </data>
   <data name="Desktop.Workspace" xml:space="preserve"><value>Workspace</value></data>
   <data name="Desktop.Arrangement" xml:space="preserve"><value>Arrangement</value></data>
@@ -2722,4 +2852,118 @@ Applying replaces the source of this input.</value></data>
   <data name="PluginDetails.ContractVersion" xml:space="preserve"><value>Contract version</value></data>
   <data name="PluginDetails.Phonemizer" xml:space="preserve"><value>Phonemizer</value></data>
   <data name="PluginDetails.BatchEdit" xml:space="preserve"><value>Batch editing tool</value></data>
+  <data name="EditorMore.ExportPianoRollVideo" xml:space="preserve">
+    <value>Export piano roll video</value>
+  </data>
+  <data name="ExportVideoPopup.Title" xml:space="preserve">
+    <value>Piano roll video</value>
+  </data>
+  <data name="ExportVideoPopup.PathLabel" xml:space="preserve">
+    <value>Save to</value>
+  </data>
+  <data name="ExportVideoPopup.SelectPath" xml:space="preserve">
+    <value>Choose file…</value>
+  </data>
+  <data name="ExportVideoPopup.SaveDialogTitle" xml:space="preserve">
+    <value>Save piano roll video</value>
+  </data>
+  <data name="ExportVideoPopup.PathRequired" xml:space="preserve">
+    <value>Choose where to save the video first.</value>
+  </data>
+  <data name="ExportVideoPopup.AspectLabel" xml:space="preserve">
+    <value>Frame size</value>
+  </data>
+  <data name="ExportVideoPopup.Aspect.Landscape" xml:space="preserve">
+    <value>Landscape 1920×1080</value>
+  </data>
+  <data name="ExportVideoPopup.Aspect.Portrait" xml:space="preserve">
+    <value>Portrait 1080×1920</value>
+  </data>
+  <data name="ExportVideoPopup.Aspect.Custom" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="ExportVideoPopup.Width" xml:space="preserve">
+    <value>Width</value>
+  </data>
+  <data name="ExportVideoPopup.Height" xml:space="preserve">
+    <value>Height</value>
+  </data>
+  <data name="ExportVideoPopup.ShowPortrait" xml:space="preserve">
+    <value>Show singer portrait</value>
+  </data>
+  <data name="ExportVideoPopup.IncludeAudio" xml:space="preserve">
+    <value>Include project audio</value>
+  </data>
+  <data name="ExportVideoPopup.Fps60" xml:space="preserve">
+    <value>60 fps (slower to render)</value>
+  </data>
+  <data name="ExportVideoPopup.Hint" xml:space="preserve">
+    <value>The video is rendered offline, frame by frame, so long songs take a while. Keep the app open until it finishes.</value>
+  </data>
+  <data name="ExportVideoPopup.Start" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="ExportVideoPopup.Exporting" xml:space="preserve">
+    <value>Rendering video…</value>
+  </data>
+  <data name="ExportVideoPopup.NoEncoder" xml:space="preserve">
+    <value>Video export is not available on this platform.</value>
+  </data>
+  <data name="ExportVideoPopup.Toast.Success" xml:space="preserve">
+    <value>Piano roll video saved.</value>
+  </data>
+  <data name="ExportVideoPopup.Toast.Cancelled" xml:space="preserve">
+    <value>Video export cancelled.</value>
+  </data>
+  <data name="ExportVideoPopup.Toast.Failed" xml:space="preserve">
+    <value>Video export failed.</value>
+  </data>
+  <data name="Options.ResamplerCatalog" xml:space="preserve">
+    <value>Resamplers</value>
+  </data>
+  <data name="Options.ResamplerCatalog.Desc" xml:space="preserve">
+    <value>Download ready-made resamplers or add your own</value>
+  </data>
+  <data name="ResamplerCatalog.Title" xml:space="preserve">
+    <value>Resamplers</value>
+  </data>
+  <data name="ResamplerCatalog.Tab.Catalog" xml:space="preserve">
+    <value>Catalog</value>
+  </data>
+  <data name="ResamplerCatalog.Tab.Own" xml:space="preserve">
+    <value>My own</value>
+  </data>
+  <data name="ResamplerCatalog.Install" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="ResamplerCatalog.Update" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="ResamplerCatalog.Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="ResamplerCatalog.Installed" xml:space="preserve">
+    <value>Installed</value>
+  </data>
+  <data name="ResamplerCatalog.Source" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="ResamplerCatalog.AddFromFile" xml:space="preserve">
+    <value>Add from file</value>
+  </data>
+  <data name="ResamplerCatalog.OwnEmpty" xml:space="preserve">
+    <value>No resamplers of your own yet. Tap the file button to add a .sh resampler.</value>
+  </data>
+  <data name="ResamplerCatalog.Error.Load" xml:space="preserve">
+    <value>Couldn't load the catalog. Check your connection and refresh.</value>
+  </data>
+  <data name="ResamplerCatalog.Toast.Installed" xml:space="preserve">
+    <value>Resampler ready</value>
+  </data>
+  <data name="ResamplerCatalog.Toast.Failed" xml:space="preserve">
+    <value>Failed:</value>
+  </data>
+  <data name="ResamplerCatalog.FilePicker.Title" xml:space="preserve">
+    <value>Select a resampler</value>
+  </data>
 </root>

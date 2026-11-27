@@ -1,0 +1,119 @@
+name: Build APK Artifact
+
+on:
+  push:
+    branches:
+      - feature/custom-resampler-manager
+
+permissions:
+  contents: write
+
+jobs:
+  android-build:
+    name: Build Android ARM64 APK
+    env:
+      AVALONIA_TELEMETRY_OPTOUT: "1"
+      Configuration: Release
+      RuntimeIdentifier: android-arm64
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          persist-credentials: false
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Setup Android SDK command-line tools
+        uses: android-actions/setup-android@v3
+        with:
+          packages: 'platform-tools platforms;android-36 build-tools;36.0.0'
+          log-accepted-android-sdk-licenses: false
+
+      - name: Install Android workload
+        run: dotnet workload install android
+
+      - name: Setup native Bazel build tools
+        uses: ./.github/actions/setup-worldline
+
+      - name: Install Android native toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          sdkmanager "ndk;$(tr -d '\r\n' < native/android-ndk-version.txt)"
+
+      - name: Set the app name (CI only, repo files stay unchanged)
+        run: |
+          sed -i 's|<string name="app_name">.*</string>|<string name="app_name">OpenUtau Mobile</string>|' OpenUtauMobile.Android/Resources/values/strings.xml
+          grep -n app_name OpenUtauMobile.Android/Resources/values/strings.xml
+
+      - name: Prepare signing key
+        id: signing
+        env:
+          KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          # With the repo secrets set, every build is signed with the same key, so new APKs
+          # install over older ones (no uninstall, no data loss). Without them the build falls
+          # back to a random debug key, like before.
+          if [ -n "$KEYSTORE_B64" ]; then
+            echo "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/release.keystore"
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+            echo "Using the fixed signing key."
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::ANDROID_KEYSTORE_BASE64 is not set - falling back to a random debug key (updates will need an uninstall)."
+          fi
+
+      - name: Build Android ARM64
+        env:
+          KS_PASS: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KS_FILE: ${{ runner.temp }}/release.keystore
+        run: |
+          SIGN=()
+          if [ "${{ steps.signing.outputs.enabled }}" = "true" ]; then
+            SIGN=(-p:AndroidKeyStore=true "-p:AndroidSigningKeyStore=$KS_FILE" -p:AndroidSigningKeyAlias=openutau
+                  -p:AndroidSigningStorePass=env:KS_PASS -p:AndroidSigningKeyPass=env:KS_PASS)
+          fi
+          dotnet build OpenUtauMobile.Android/OpenUtauMobile.Android.csproj -p:ApplicationId=pers.vocoder712.openutaumobile.canary.resampler \
+            -p:Version=1.3.0 -p:BuildNumber=$((20000 + GITHUB_RUN_NUMBER)) \
+            -p:SourceCommit="${GITHUB_SHA::7}" -p:ActionRunId="$GITHUB_RUN_ID" "${SIGN[@]}"
+
+      - name: Remove signing key from the runner
+        if: always()
+        run: rm -f "$RUNNER_TEMP/release.keystore"
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: OpenUtauMobile-android-arm64-debug
+          path: OpenUtauMobile.Android/bin/Release/**/*.apk
+          if-no-files-found: error
+
+      - name: Publish GitHub release
+        if: contains(github.event.head_commit.message, '[release]')
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: v1.3.0
+        run: |
+          set -euo pipefail
+          apk=$(find OpenUtauMobile.Android/bin/Release -name '*-Signed.apk' | head -n1)
+          if [ -z "$apk" ]; then apk=$(find OpenUtauMobile.Android/bin/Release -name '*.apk' | head -n1); fi
+          test -n "$apk"
+          cp "$apk" OpenUtauMobile-v1.3.0-android-arm64.apk
+          gh release create "$TAG" OpenUtauMobile-v1.3.0-android-arm64.apk \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "OpenUtau Mobile 1.3.0" \
+            --notes-file .github/release-notes/v1.3.0.md \
+            --latest
